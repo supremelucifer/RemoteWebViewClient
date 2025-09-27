@@ -390,18 +390,9 @@ bool RemoteWebView::ws_send_open_url_(const char *url, uint16_t flags) {
 bool RemoteWebView::ws_send_keepalive_() {
   if (!ws_client_ || !ws_send_mtx_ || !esp_websocket_client_is_connected(ws_client_))
     return false;
-
-  uint8_t pkt[sizeof(proto::KeepalivePacket)];
-  const size_t n = proto::build_keepalive_packet(pkt);
-  if (!n) return false;
-
-  const TickType_t to = pdMS_TO_TICKS(50);
-  if (xSemaphoreTake(ws_send_mtx_, to) != pdTRUE)
-    return false;
-
-  const int r = esp_websocket_client_send_bin(ws_client_, (const char*)pkt, (int)n, to);
-  xSemaphoreGive(ws_send_mtx_);
-  return r == (int)n;
+  
+  // De functie is nu leeg, maar geeft wel een succes-signaal terug.
+  return true;
 }
 
 void RemoteWebViewTouchListener::update(const touchscreen::TouchPoints_t &pts) {
